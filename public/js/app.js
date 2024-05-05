@@ -5305,7 +5305,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     };
   },
   methods: {
-    checkForm: function checkForm(e) {
+    checkForm: function checkForm() {
       this.errors = [];
       if (!this.form.title) {
         this.errors.push("Title required.");
@@ -5313,7 +5313,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       if (!this.errors.length) {
         return true;
       }
-      e.preventDefault();
     },
     deleteTask: function deleteTask(id) {
       var _this = this;

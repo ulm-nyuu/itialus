@@ -101,7 +101,7 @@
             }
         },
         methods : {
-            checkForm(e){
+            checkForm(){
                 this.errors = [];
 
                 if (!this.form.title) {
@@ -112,7 +112,6 @@
                     return true;
                 }
 
-                e.preventDefault();
             },
 
             async deleteTask(id){
