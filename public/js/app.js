@@ -5264,7 +5264,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -5320,17 +5319,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         return _regeneratorRuntime().wrap(function _callee$(_context) {
           while (1) switch (_context.prev = _context.next) {
             case 0:
-              if (!_this.checkForm) {
-                _context.next = 6;
+              if (!_this.checkForm()) {
+                _context.next = 9;
                 break;
               }
-              _context.next = 3;
+              _this.submitting = 1;
+              _context.next = 4;
               return axios.post("/api/tasks/create", _this.form);
-            case 3:
+            case 4:
               _yield$axios$post = _context.sent;
               data = _yield$axios$post.data;
               _this.data = data;
-            case 6:
+              _this.errors = [];
+              _this.submitting = 0;
+            case 9:
             case "end":
               return _context.stop();
           }
@@ -9988,7 +9990,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n#app {\r\n  width: 95%;\r\n  margin: 0 auto;\n}\n.VuePagination {\r\n  text-align: center;\n}\n.vue-title {\r\n  text-align: center;\r\n  margin-bottom: 10px;\n}\n.vue-pagination-ad {\r\n  text-align: center;\n}\n.glyphicon.glyphicon-eye-open {\r\n  width: 16px;\r\n  display: block;\r\n  margin: 0 auto;\n}\nth:nth-child(3) {\r\n  text-align: center;\n}\n.VueTables__child-row-toggler {\r\n  width: 16px;\r\n  height: 16px;\r\n  line-height: 16px;\r\n  display: block;\r\n  margin: auto;\r\n  text-align: center;\n}\n.VueTables__child-row-toggler--closed::before {\r\n  content: \"+\";\n}\n.VueTables__child-row-toggler--open::before {\r\n  content: \"-\";\n}\n[v-cloak] {\r\n  display:none;\n}\n.task-button {\r\n    display: block;\r\n    width: 10%;\r\n    margin: 5px;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n#app {\r\n  width: 95%;\r\n  margin: 0 auto;\n}\n.VuePagination {\r\n  text-align: center;\n}\n.vue-title {\r\n  text-align: center;\r\n  margin-bottom: 10px;\n}\n.vue-pagination-ad {\r\n  text-align: center;\n}\n.glyphicon.glyphicon-eye-open {\r\n  width: 16px;\r\n  display: block;\r\n  margin: 0 auto;\n}\nth:nth-child(3) {\r\n  text-align: center;\n}\n.VueTables__child-row-toggler {\r\n  width: 16px;\r\n  height: 16px;\r\n  line-height: 16px;\r\n  display: block;\r\n  margin: auto;\r\n  text-align: center;\n}\n.VueTables__child-row-toggler--closed::before {\r\n  content: \"+\";\n}\n.VueTables__child-row-toggler--open::before {\r\n  content: \"-\";\n}\n[v-cloak] {\r\n  display:none;\n}\n.task-button {\r\n    display: block;\r\n    width: 10%;\r\n    margin: 5px;\n}\n.errors {\r\n    list-style-type: none;\n}\n.errors li {\r\n    color : red;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -29997,6 +29999,7 @@ var render = function () {
                 ? _c("p", [
                     _c(
                       "ul",
+                      { staticClass: "errors" },
                       _vm._l(_vm.errors, function (error) {
                         return _c("li", [_vm._v(_vm._s(error))])
                       }),
@@ -30111,10 +30114,6 @@ var render = function () {
                     [
                       _c("option", { attrs: { value: "Pending" } }, [
                         _vm._v("Pending"),
-                      ]),
-                      _vm._v(" "),
-                      _c("option", { attrs: { value: "Assigned" } }, [
-                        _vm._v("Assigned"),
                       ]),
                       _vm._v(" "),
                       _c("option", { attrs: { value: "Completed" } }, [

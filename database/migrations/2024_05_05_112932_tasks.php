@@ -18,7 +18,7 @@ class Tasks extends Migration
             $table->bigInteger('created_by')->unsigned()->index()->nullable();
             $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
             $table->string('title');
-            $table->longText('description');
+            $table->longText('description')->nullable();
             $table->string('status');
             $table->timestamps();
         });

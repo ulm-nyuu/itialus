@@ -29,7 +29,7 @@ class Tasks extends Model
             'ab.name as assignedBy',
             'at.name as assignedTo'
         ])
-        ->leftJoin('users as cb', 'cb.id', '=', 'tasks.created_by')
+        ->join('users as cb', 'cb.id', '=', 'tasks.created_by')
         ->join('task_assignments', 'task_assignments.task_id', '=', 'tasks.id')
         ->leftJoin('users as ab', 'ab.id', '=', 'task_assignments.assigned_by')
         ->leftJoin('users as at', 'at.id', '=', 'task_assignments.assigned_to')

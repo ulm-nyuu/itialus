@@ -12,7 +12,7 @@
                         <button v-if="updating" class="task-button" @click="updateTask">Update Task</button>
 
                         <p v-if="errors.length">
-                            <ul>
+                            <ul class="errors">
                                 <li v-for="error in errors">{{ error }}</li>
                             </ul>
                         </p>
@@ -30,7 +30,6 @@
                                 <label for="statusinput">Status</label>
                                 <select v-model="form.status" class="form-control" id="statusinput">
                                     <option value="Pending">Pending</option>
-                                    <option value="Assigned">Assigned</option>
                                     <option value="Completed">Completed</option>
                                     <option value="Cancelled">Cancelled</option>
                                 </select>
@@ -114,9 +113,13 @@
             },
 
             async createTask(){
-                if(this.checkForm){
+                
+                if(this.checkForm()){
+                    this.submitting = 1;
                     const { data } = await axios.post("/api/tasks/create",this.form);
                     this.data = data;
+                    this.errors = [];
+                    this.submitting = 0;
                 }
             },
 
@@ -203,5 +206,13 @@ th:nth-child(3) {
     display: block;
     width: 10%;
     margin: 5px;
+}
+
+.errors {
+    list-style-type: none;
+}
+
+.errors li {
+    color : red;
 }
 </style>

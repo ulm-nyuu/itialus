@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Tasks;
 use App\Models\TaskAssignment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TasksController extends Controller
 {
@@ -29,7 +30,7 @@ class TasksController extends Controller
             'title' => $request->title,
             'description' => $request->description,
             'status' => $request->status,
-            'created_by' => $request->createdBy
+            'created_by' => Auth::user()->id
         ]);
 
         $task_assigned = TaskAssignment::create([
