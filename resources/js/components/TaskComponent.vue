@@ -7,6 +7,32 @@
 
                     <div class="card-body">
                         <button class="task-button">Add Task</button>
+
+                        <form>
+                            <div class="form-group">
+                                <label for="titleinput">Title</label>
+                                <input v-model="form.title" type="text" class="form-control" id="titleinput" placeholder="Task Title">
+                            </div>
+                            <div class="form-group">
+                                <label for="descriptioninput">Description</label>
+                                <textarea v-model="form.description" type="text" class="form-control" id="descriptioninput" placeholder="Task Description"> </textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="statusinput">Status</label>
+                                <select v-model="form.status" class="form-control" id="statusinput">
+                                    <option value="Pending">Pending</option>
+                                    <option value="Assigned">Assigned</option>
+                                    <option value="Completed">Completed</option>
+                                    <option value="Cancelled">Cancelled</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="assigninput">Assign To</label>
+                                <select v-model="form.assignedTo" class="form-control" id="assigninput">
+                                    <option v-for="user in users" :value="user.id">{{user.name}}</option>
+                                </select>
+                            </div>
+                        </form>
                         <v-client-table 
                             :columns="columns" 
                             v-model="data" 
@@ -29,6 +55,13 @@
     export default {
         data(){
             return {
+                form : {
+                    title : '',
+                    description : '',
+                    status : 'Pending',
+                    assignedTo : ''
+                },
+                users : [],
                 columns: ['id','createdBy','title', 'description', 'status','assignedBy','assignedTo','action'],
                 data: getData(),
                 options: {
@@ -51,8 +84,16 @@
                     
             }
         },
+        methods : {
+            async getUsers(){
+                const { data } = await axios.get("/api/user-list");
+                this.users = data;
+                if(data.length > 0) this.form.assignedTo = data[0].id;
+            }
+        },
         mounted() {
             console.log('Component mounted.')
+            this.getUsers();
         }
     }
 
