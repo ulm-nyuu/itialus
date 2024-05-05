@@ -19,4 +19,17 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
+
 Route::get('/user-list','App\Http\Controllers\UserController@getUsers');
+
+
+Route::group(['middleware' => 'web'], function () {
+    Route::auth();
+    Route::get('/get-current-user','App\Http\Controllers\UserController@getCurrentUser');
+
+
+    Route::group(['prefix'=>'tasks'], function(){
+       Route::post('/create','App\Http\Controllers\TasksController@create');
+       Route::get('/show','App\Http\Controllers\TasksController@show');
+    });
+});

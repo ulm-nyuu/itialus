@@ -5256,19 +5256,33 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
+      submitting: 0,
+      updating: 0,
       form: {
+        createdBy: '',
         title: '',
         description: '',
         status: 'Pending',
-        assignedTo: ''
+        assignedTo: '',
+        assignedBy: ''
       },
+      errors: [],
       users: [],
       columns: ['id', 'createdBy', 'title', 'description', 'status', 'assignedBy', 'assignedTo', 'action'],
-      data: getData(),
+      data: [],
       options: {
         headings: {
           id: 'Task ID',
@@ -5289,44 +5303,111 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     };
   },
   methods: {
-    getUsers: function getUsers() {
+    checkForm: function checkForm(e) {
+      this.errors = [];
+      if (!this.form.title) {
+        this.errors.push("Title required.");
+      }
+      if (!this.errors.length) {
+        return true;
+      }
+      e.preventDefault();
+    },
+    createTask: function createTask() {
       var _this = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-        var _yield$axios$get, data;
+        var _yield$axios$post, data;
         return _regeneratorRuntime().wrap(function _callee$(_context) {
           while (1) switch (_context.prev = _context.next) {
             case 0:
-              _context.next = 2;
-              return axios.get("/api/user-list");
-            case 2:
-              _yield$axios$get = _context.sent;
-              data = _yield$axios$get.data;
-              _this.users = data;
-              if (data.length > 0) _this.form.assignedTo = data[0].id;
+              if (!_this.checkForm) {
+                _context.next = 6;
+                break;
+              }
+              _context.next = 3;
+              return axios.post("/api/tasks/create", _this.form);
+            case 3:
+              _yield$axios$post = _context.sent;
+              data = _yield$axios$post.data;
+              _this.data = data;
             case 6:
             case "end":
               return _context.stop();
           }
         }, _callee);
       }))();
+    },
+    getTasks: function getTasks() {
+      var _this2 = this;
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+        var _yield$axios$get, data;
+        return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+          while (1) switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.next = 2;
+              return axios.get("/api/tasks/show");
+            case 2:
+              _yield$axios$get = _context2.sent;
+              data = _yield$axios$get.data;
+              _this2.data = data;
+            case 5:
+            case "end":
+              return _context2.stop();
+          }
+        }, _callee2);
+      }))();
+    },
+    getUsers: function getUsers() {
+      var _this3 = this;
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+        var _yield$axios$get2, data;
+        return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+          while (1) switch (_context3.prev = _context3.next) {
+            case 0:
+              _context3.next = 2;
+              return axios.get("/api/user-list");
+            case 2:
+              _yield$axios$get2 = _context3.sent;
+              data = _yield$axios$get2.data;
+              _this3.users = data;
+              if (data.length > 0) _this3.form.assignedTo = data[0].id;
+            case 6:
+            case "end":
+              return _context3.stop();
+          }
+        }, _callee3);
+      }))();
+    },
+    getCurrentUser: function getCurrentUser() {
+      var _this4 = this;
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+        var _yield$axios$get3, data;
+        return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+          while (1) switch (_context4.prev = _context4.next) {
+            case 0:
+              _context4.next = 2;
+              return axios.get("/api/get-current-user");
+            case 2:
+              _yield$axios$get3 = _context4.sent;
+              data = _yield$axios$get3.data;
+              if (data) {
+                _this4.form.assignedBy = data.id;
+                _this4.form.createdBy = data.id;
+              }
+            case 5:
+            case "end":
+              return _context4.stop();
+          }
+        }, _callee4);
+      }))();
     }
   },
   mounted: function mounted() {
-    console.log('Component mounted.');
     this.getUsers();
+    this.getCurrentUser();
+    this.getTasks();
   }
 });
-function getData() {
-  return [{
-    id: 1,
-    createdBy: 'Joseph',
-    title: 'Title',
-    description: 'Description',
-    status: 'Pending',
-    assignedBy: 'Joseph',
-    assignedTo: 'Joseph'
-  }];
-}
 
 /***/ }),
 
@@ -29884,9 +29965,45 @@ var render = function () {
             "div",
             { staticClass: "card-body" },
             [
-              _c("button", { staticClass: "task-button" }, [
-                _vm._v("Add Task"),
-              ]),
+              !_vm.submitting
+                ? _c(
+                    "button",
+                    {
+                      staticClass: "task-button",
+                      on: { click: _vm.createTask },
+                    },
+                    [_vm._v("Add Task")]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.submitting
+                ? _c("button", { staticClass: "task-button" }, [
+                    _vm._v("Creating Task..."),
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.updating
+                ? _c(
+                    "button",
+                    {
+                      staticClass: "task-button",
+                      on: { click: _vm.updateTask },
+                    },
+                    [_vm._v("Update Task")]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.errors.length
+                ? _c("p", [
+                    _c(
+                      "ul",
+                      _vm._l(_vm.errors, function (error) {
+                        return _c("li", [_vm._v(_vm._s(error))])
+                      }),
+                      0
+                    ),
+                  ])
+                : _vm._e(),
               _vm._v(" "),
               _c("form", [
                 _c("div", { staticClass: "form-group" }, [

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Tasks;
+use App\Models\TaskAssignment;
 use Illuminate\Http\Request;
 
 class TasksController extends Controller
@@ -22,9 +23,22 @@ class TasksController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $task = Tasks::create([
+            'title' => $request->title,
+            'description' => $request->description,
+            'status' => $request->status,
+            'created_by' => $request->createdBy
+        ]);
+
+        $task_assigned = TaskAssignment::create([
+            'assigned_to' => $request->assignedTo,
+            'assigned_by' => $request->assignedBy,
+            'task_id' => $task->id
+        ]);
+
+        return Tasks::getTasks();
     }
 
     /**
@@ -46,7 +60,7 @@ class TasksController extends Controller
      */
     public function show(Tasks $tasks)
     {
-        //
+        return Tasks::getTasks();
     }
 
     /**

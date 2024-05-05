@@ -6,7 +6,16 @@
                     <div class="card-header">Tasks</div>
 
                     <div class="card-body">
-                        <button class="task-button">Add Task</button>
+                        <button v-if="!submitting" class="task-button" @click="createTask">Add Task</button>
+                        <button v-if="submitting" class="task-button">Creating Task...</button>
+
+                        <button v-if="updating" class="task-button" @click="updateTask">Update Task</button>
+
+                        <p v-if="errors.length">
+                            <ul>
+                                <li v-for="error in errors">{{ error }}</li>
+                            </ul>
+                        </p>
 
                         <form>
                             <div class="form-group">
@@ -55,15 +64,20 @@
     export default {
         data(){
             return {
+                submitting : 0,
+                updating : 0,
                 form : {
+                    createdBy : '',
                     title : '',
                     description : '',
                     status : 'Pending',
-                    assignedTo : ''
+                    assignedTo : '',
+                    assignedBy : ''
                 },
+                errors : [],
                 users : [],
                 columns: ['id','createdBy','title', 'description', 'status','assignedBy','assignedTo','action'],
-                data: getData(),
+                data: [],
                 options: {
                     headings: {
                             id : 'Task ID',
@@ -85,30 +99,52 @@
             }
         },
         methods : {
+            checkForm(e){
+                this.errors = [];
+
+                if (!this.form.title) {
+                    this.errors.push("Title required.");
+                }
+
+                if (!this.errors.length) {
+                    return true;
+                }
+
+                e.preventDefault();
+            },
+
+            async createTask(){
+                if(this.checkForm){
+                    const { data } = await axios.post("/api/tasks/create",this.form);
+                    this.data = data;
+                }
+            },
+
+            async getTasks(){
+                const { data } = await axios.get("/api/tasks/show");
+                this.data = data;
+            },
+            
             async getUsers(){
                 const { data } = await axios.get("/api/user-list");
                 this.users = data;
                 if(data.length > 0) this.form.assignedTo = data[0].id;
-            }
+            },
+            async getCurrentUser(){
+                const { data } = await axios.get("/api/get-current-user");
+                if(data){
+                    this.form.assignedBy = data.id;
+                    this.form.createdBy = data.id;
+                } 
+            },
         },
         mounted() {
-            console.log('Component mounted.')
             this.getUsers();
+            this.getCurrentUser();
+            this.getTasks();
         }
     }
 
-
-function getData(){
-    return [{
-        id: 1,
-        createdBy : 'Joseph',
-        title: 'Title',
-        description: 'Description',
-        status: 'Pending',
-        assignedBy : 'Joseph',
-        assignedTo : 'Joseph'
-    }]
-}
 </script>
 
 
