@@ -6,10 +6,7 @@
                     <div class="card-header">Tasks</div>
 
                     <div class="card-body">
-                        <button v-if="!submitting" class="task-button" @click="createTask">Add Task</button>
-                        <button v-if="submitting" class="task-button">Creating Task...</button>
-
-                        <button v-if="updating" class="task-button" @click="updateTask">Update Task</button>
+                        
 
                         <p v-if="errors.length">
                             <ul class="errors">
@@ -41,13 +38,19 @@
                                 </select>
                             </div>
                         </form>
+
+                        <button v-if="!submitting" class="task-button" @click="createTask">Add Task</button>
+                        <button v-if="submitting && !updating" class="task-button">Creating Task...</button>
+
+                        <button v-if="updating" class="task-button" @click="editTask">Update Task</button>
+
                         <v-client-table 
                             :columns="columns" 
                             v-model="data" 
                             :options="options">
-                            <div slot="action" slot-scope="props">
-                                <button  class="btn btn-primary btn-sm">Edit</button>
-                                <button  class="btn btn-danger btn-sm">Delete</button>
+                            <div slot="action" slot-scope="{row}">
+                                <button  class="btn btn-primary btn-sm" @click="setEditTask(row)">Edit</button>
+                                <button  class="btn btn-danger btn-sm" @click="deleteTask(row.id)">Delete</button>
                             </div>
                             
                         </v-client-table>
@@ -110,6 +113,44 @@
                 }
 
                 e.preventDefault();
+            },
+
+            async deleteTask(id){
+
+                if (confirm("Delete Task?") == true) {
+                    const { data } = await axios.post("/api/tasks/destroy",{ id : id});
+                    this.data = data;
+                }
+                
+            },
+
+            setEditTask(row){
+                console.log(row);
+                this.form = row;
+                this.form.assignedTo = row.assigned_to;
+                this.submitting = 1;
+                this.updating = 1;
+
+            },
+
+            async editTask(){
+                if(this.checkForm()){
+                    
+                    this.update
+                    const { data } = await axios.post("/api/tasks/edit",this.form);
+                    this.data = data;
+                    this.errors = [];
+                    this.updating = 0;
+                    this.submitting = 0;
+                    this.form = {
+                        createdBy : '',
+                        title : '',
+                        description : '',
+                        status : 'Pending',
+                        assignedTo : '',
+                        assignedBy : ''
+                    }
+                }
             },
 
             async createTask(){
@@ -204,7 +245,7 @@ th:nth-child(3) {
 
 .task-button {
     display: block;
-    width: 10%;
+    width: 100%;
     margin: 5px;
 }
 

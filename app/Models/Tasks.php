@@ -27,7 +27,8 @@ class Tasks extends Model
             'description',
             'status',
             'ab.name as assignedBy',
-            'at.name as assignedTo'
+            'at.name as assignedTo',
+            'assigned_to'
         ])
         ->join('users as cb', 'cb.id', '=', 'tasks.created_by')
         ->join('task_assignments', 'task_assignments.task_id', '=', 'tasks.id')

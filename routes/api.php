@@ -30,6 +30,8 @@ Route::group(['middleware' => 'web'], function () {
 
     Route::group(['prefix'=>'tasks'], function(){
        Route::post('/create','App\Http\Controllers\TasksController@create');
+       Route::post('/edit','App\Http\Controllers\TasksController@edit');
+       Route::post('/destroy','App\Http\Controllers\TasksController@destroy');
        Route::get('/show','App\Http\Controllers\TasksController@show');
     });
 });

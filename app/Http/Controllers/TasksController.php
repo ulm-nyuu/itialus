@@ -35,23 +35,13 @@ class TasksController extends Controller
 
         $task_assigned = TaskAssignment::create([
             'assigned_to' => $request->assignedTo,
-            'assigned_by' => $request->assignedBy,
+            'assigned_by' => Auth::user()->id,
             'task_id' => $task->id
         ]);
 
         return Tasks::getTasks();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
     /**
      * Display the specified resource.
@@ -70,22 +60,21 @@ class TasksController extends Controller
      * @param  \App\Models\Tasks  $tasks
      * @return \Illuminate\Http\Response
      */
-    public function edit(Tasks $tasks)
+    public function edit(Request $request)
     {
-        //
+        Tasks::where('id',$request->id)->update([
+            'title' => $request->title,
+            'description' => $request->description,
+            'status' => $request->status
+        ]);
+
+        TaskAssignment::where('id',$request->id)->update([
+            'assigned_to' => $request->assignedTo
+        ]);
+
+        return Tasks::getTasks();
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Tasks  $tasks
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Tasks $tasks)
-    {
-        //
-    }
 
     /**
      * Remove the specified resource from storage.
@@ -93,8 +82,10 @@ class TasksController extends Controller
      * @param  \App\Models\Tasks  $tasks
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Tasks $tasks)
-    {
-        //
+    public function destroy(Request $request)
+    {   
+        if($request->id) Tasks::where('id',$request->id)->delete();
+        
+        return Tasks::getTasks();
     }
 }

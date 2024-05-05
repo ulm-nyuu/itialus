@@ -5264,6 +5264,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -5312,95 +5315,164 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }
       e.preventDefault();
     },
-    createTask: function createTask() {
+    deleteTask: function deleteTask(id) {
       var _this = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
         var _yield$axios$post, data;
         return _regeneratorRuntime().wrap(function _callee$(_context) {
           while (1) switch (_context.prev = _context.next) {
             case 0:
-              if (!_this.checkForm()) {
-                _context.next = 9;
+              if (!(confirm("Delete Task?") == true)) {
+                _context.next = 6;
                 break;
               }
-              _this.submitting = 1;
-              _context.next = 4;
-              return axios.post("/api/tasks/create", _this.form);
-            case 4:
+              _context.next = 3;
+              return axios.post("/api/tasks/destroy", {
+                id: id
+              });
+            case 3:
               _yield$axios$post = _context.sent;
               data = _yield$axios$post.data;
               _this.data = data;
-              _this.errors = [];
-              _this.submitting = 0;
-            case 9:
+            case 6:
             case "end":
               return _context.stop();
           }
         }, _callee);
       }))();
     },
-    getTasks: function getTasks() {
+    setEditTask: function setEditTask(row) {
+      console.log(row);
+      this.form = row;
+      this.form.assignedTo = row.assigned_to;
+      this.submitting = 1;
+      this.updating = 1;
+    },
+    editTask: function editTask() {
       var _this2 = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-        var _yield$axios$get, data;
+        var _yield$axios$post2, data;
         return _regeneratorRuntime().wrap(function _callee2$(_context2) {
           while (1) switch (_context2.prev = _context2.next) {
             case 0:
-              _context2.next = 2;
-              return axios.get("/api/tasks/show");
-            case 2:
-              _yield$axios$get = _context2.sent;
-              data = _yield$axios$get.data;
+              if (!_this2.checkForm()) {
+                _context2.next = 11;
+                break;
+              }
+              _this2.update;
+              _context2.next = 4;
+              return axios.post("/api/tasks/edit", _this2.form);
+            case 4:
+              _yield$axios$post2 = _context2.sent;
+              data = _yield$axios$post2.data;
               _this2.data = data;
-            case 5:
+              _this2.errors = [];
+              _this2.updating = 0;
+              _this2.submitting = 0;
+              _this2.form = {
+                createdBy: '',
+                title: '',
+                description: '',
+                status: 'Pending',
+                assignedTo: '',
+                assignedBy: ''
+              };
+            case 11:
             case "end":
               return _context2.stop();
           }
         }, _callee2);
       }))();
     },
-    getUsers: function getUsers() {
+    createTask: function createTask() {
       var _this3 = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
-        var _yield$axios$get2, data;
+        var _yield$axios$post3, data;
         return _regeneratorRuntime().wrap(function _callee3$(_context3) {
           while (1) switch (_context3.prev = _context3.next) {
             case 0:
-              _context3.next = 2;
-              return axios.get("/api/user-list");
-            case 2:
-              _yield$axios$get2 = _context3.sent;
-              data = _yield$axios$get2.data;
-              _this3.users = data;
-              if (data.length > 0) _this3.form.assignedTo = data[0].id;
-            case 6:
+              if (!_this3.checkForm()) {
+                _context3.next = 9;
+                break;
+              }
+              _this3.submitting = 1;
+              _context3.next = 4;
+              return axios.post("/api/tasks/create", _this3.form);
+            case 4:
+              _yield$axios$post3 = _context3.sent;
+              data = _yield$axios$post3.data;
+              _this3.data = data;
+              _this3.errors = [];
+              _this3.submitting = 0;
+            case 9:
             case "end":
               return _context3.stop();
           }
         }, _callee3);
       }))();
     },
-    getCurrentUser: function getCurrentUser() {
+    getTasks: function getTasks() {
       var _this4 = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
-        var _yield$axios$get3, data;
+        var _yield$axios$get, data;
         return _regeneratorRuntime().wrap(function _callee4$(_context4) {
           while (1) switch (_context4.prev = _context4.next) {
             case 0:
               _context4.next = 2;
-              return axios.get("/api/get-current-user");
+              return axios.get("/api/tasks/show");
             case 2:
-              _yield$axios$get3 = _context4.sent;
-              data = _yield$axios$get3.data;
-              if (data) {
-                _this4.form.assignedBy = data.id;
-                _this4.form.createdBy = data.id;
-              }
+              _yield$axios$get = _context4.sent;
+              data = _yield$axios$get.data;
+              _this4.data = data;
             case 5:
             case "end":
               return _context4.stop();
           }
         }, _callee4);
+      }))();
+    },
+    getUsers: function getUsers() {
+      var _this5 = this;
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+        var _yield$axios$get2, data;
+        return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+          while (1) switch (_context5.prev = _context5.next) {
+            case 0:
+              _context5.next = 2;
+              return axios.get("/api/user-list");
+            case 2:
+              _yield$axios$get2 = _context5.sent;
+              data = _yield$axios$get2.data;
+              _this5.users = data;
+              if (data.length > 0) _this5.form.assignedTo = data[0].id;
+            case 6:
+            case "end":
+              return _context5.stop();
+          }
+        }, _callee5);
+      }))();
+    },
+    getCurrentUser: function getCurrentUser() {
+      var _this6 = this;
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
+        var _yield$axios$get3, data;
+        return _regeneratorRuntime().wrap(function _callee6$(_context6) {
+          while (1) switch (_context6.prev = _context6.next) {
+            case 0:
+              _context6.next = 2;
+              return axios.get("/api/get-current-user");
+            case 2:
+              _yield$axios$get3 = _context6.sent;
+              data = _yield$axios$get3.data;
+              if (data) {
+                _this6.form.assignedBy = data.id;
+                _this6.form.createdBy = data.id;
+              }
+            case 5:
+            case "end":
+              return _context6.stop();
+          }
+        }, _callee6);
       }))();
     }
   },
@@ -9990,7 +10062,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n#app {\r\n  width: 95%;\r\n  margin: 0 auto;\n}\n.VuePagination {\r\n  text-align: center;\n}\n.vue-title {\r\n  text-align: center;\r\n  margin-bottom: 10px;\n}\n.vue-pagination-ad {\r\n  text-align: center;\n}\n.glyphicon.glyphicon-eye-open {\r\n  width: 16px;\r\n  display: block;\r\n  margin: 0 auto;\n}\nth:nth-child(3) {\r\n  text-align: center;\n}\n.VueTables__child-row-toggler {\r\n  width: 16px;\r\n  height: 16px;\r\n  line-height: 16px;\r\n  display: block;\r\n  margin: auto;\r\n  text-align: center;\n}\n.VueTables__child-row-toggler--closed::before {\r\n  content: \"+\";\n}\n.VueTables__child-row-toggler--open::before {\r\n  content: \"-\";\n}\n[v-cloak] {\r\n  display:none;\n}\n.task-button {\r\n    display: block;\r\n    width: 10%;\r\n    margin: 5px;\n}\n.errors {\r\n    list-style-type: none;\n}\n.errors li {\r\n    color : red;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n#app {\r\n  width: 95%;\r\n  margin: 0 auto;\n}\n.VuePagination {\r\n  text-align: center;\n}\n.vue-title {\r\n  text-align: center;\r\n  margin-bottom: 10px;\n}\n.vue-pagination-ad {\r\n  text-align: center;\n}\n.glyphicon.glyphicon-eye-open {\r\n  width: 16px;\r\n  display: block;\r\n  margin: 0 auto;\n}\nth:nth-child(3) {\r\n  text-align: center;\n}\n.VueTables__child-row-toggler {\r\n  width: 16px;\r\n  height: 16px;\r\n  line-height: 16px;\r\n  display: block;\r\n  margin: auto;\r\n  text-align: center;\n}\n.VueTables__child-row-toggler--closed::before {\r\n  content: \"+\";\n}\n.VueTables__child-row-toggler--open::before {\r\n  content: \"-\";\n}\n[v-cloak] {\r\n  display:none;\n}\n.task-button {\r\n    display: block;\r\n    width: 100%;\r\n    margin: 5px;\n}\n.errors {\r\n    list-style-type: none;\n}\n.errors li {\r\n    color : red;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -29967,34 +30039,6 @@ var render = function () {
             "div",
             { staticClass: "card-body" },
             [
-              !_vm.submitting
-                ? _c(
-                    "button",
-                    {
-                      staticClass: "task-button",
-                      on: { click: _vm.createTask },
-                    },
-                    [_vm._v("Add Task")]
-                  )
-                : _vm._e(),
-              _vm._v(" "),
-              _vm.submitting
-                ? _c("button", { staticClass: "task-button" }, [
-                    _vm._v("Creating Task..."),
-                  ])
-                : _vm._e(),
-              _vm._v(" "),
-              _vm.updating
-                ? _c(
-                    "button",
-                    {
-                      staticClass: "task-button",
-                      on: { click: _vm.updateTask },
-                    },
-                    [_vm._v("Update Task")]
-                  )
-                : _vm._e(),
-              _vm._v(" "),
               _vm.errors.length
                 ? _c("p", [
                     _c(
@@ -30175,22 +30219,64 @@ var render = function () {
                 ]),
               ]),
               _vm._v(" "),
+              !_vm.submitting
+                ? _c(
+                    "button",
+                    {
+                      staticClass: "task-button",
+                      on: { click: _vm.createTask },
+                    },
+                    [_vm._v("Add Task")]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.submitting && !_vm.updating
+                ? _c("button", { staticClass: "task-button" }, [
+                    _vm._v("Creating Task..."),
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.updating
+                ? _c(
+                    "button",
+                    { staticClass: "task-button", on: { click: _vm.editTask } },
+                    [_vm._v("Update Task")]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
               _c("v-client-table", {
                 attrs: { columns: _vm.columns, options: _vm.options },
                 scopedSlots: _vm._u([
                   {
                     key: "action",
-                    fn: function (props) {
+                    fn: function (ref) {
+                      var row = ref.row
                       return _c("div", {}, [
                         _c(
                           "button",
-                          { staticClass: "btn btn-primary btn-sm" },
+                          {
+                            staticClass: "btn btn-primary btn-sm",
+                            on: {
+                              click: function ($event) {
+                                return _vm.setEditTask(row)
+                              },
+                            },
+                          },
                           [_vm._v("Edit")]
                         ),
                         _vm._v(" "),
-                        _c("button", { staticClass: "btn btn-danger btn-sm" }, [
-                          _vm._v("Delete"),
-                        ]),
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-danger btn-sm",
+                            on: {
+                              click: function ($event) {
+                                return _vm.deleteTask(row.id)
+                              },
+                            },
+                          },
+                          [_vm._v("Delete")]
+                        ),
                       ])
                     },
                   },
